@@ -18,7 +18,7 @@
     <h2>affected lobe
     </h2>
     <label>location
-     <select id="atelectasis.location">
+     <select name="atelectasis.location">
         <option value="left">left</option>         
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -135,7 +135,7 @@
         var select;
 
         //Affected Lobe Location
-        select = document.getElementById("atelectasis.location");
+        select = document.getElementsByName("atelectasis.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Position

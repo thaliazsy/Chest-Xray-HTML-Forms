@@ -17,7 +17,7 @@
     <legend><h1>miliary tuberculosis 粟粒類型</h1></legend>
     <h2>affected lobe</h2>
     <label>location
-    <select id="miliary_tb.location">
+    <select name="miliary_tb.location">
         <option value="left">left</option>
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -136,7 +136,7 @@
         var select;
 
         //Affected Side
-        select = document.getElementById("miliary_tb.location");
+        select = document.getElementsByName("miliary_tb.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Position

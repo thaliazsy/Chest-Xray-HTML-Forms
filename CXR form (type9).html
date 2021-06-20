@@ -16,7 +16,7 @@
 <fieldset id="type9">
     <legend><h1>fibrosis 肺纖維化</h1></legend>
     <h2>affected side</h2>
-    <select id="fibrosis.location">
+    <select name="fibrosis.location">
         <option value="left">left</option>         
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -106,7 +106,7 @@
         var select;
 
         //Affected Side
-        select = document.getElementById("fibrosis.location");
+        select = document.getElementsByName("fibrosis.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Affected Lobe

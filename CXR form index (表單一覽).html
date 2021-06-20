@@ -18,7 +18,7 @@
     <legend><h1>Pulmonary consolidation 肺堅實化</h1></legend>
     <h2>affected side</h2>
     <label>location
-    <select name="consolidation.side">
+    <select name="consolidation.location">
         <option value="left">left</option>
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -371,5 +371,144 @@
 <br>
 <input type="submit" value="送出" action="#" method="GET" target="_blank">
 </form>
+<script>
+        const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+    
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", //Definisi (sistem) kodenya, format: nama formnya
+                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
+                }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                    "system" : "PulmonaryConsolidation/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                    "code" : "", // value (yg kita input di website)
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "AffectedSide/Distribution"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "PulmonaryConsolidation/AffectedSide/Distribution",
+                        "code" : ""
+                    }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "AffectedSide/Density",
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "PulmonaryConsolidation/AffectedSide/Density",
+                    "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "AffectedLobe"
+                    }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "PulmonaryConsolidation/AffectedLobe",
+                    "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "Size/Length"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "Size/Width"
+                }]},
+            "valueInteger":0
+            }
+        ]
+    }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementsByName("consolidation.location")[0];
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Distribution
+        select = document.getElementsByName("consolidation.distribution")[0];
+        Observation.component[1].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Density
+        select = document.getElementsByName("consolidation.density")[0];
+        Observation.component[2].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Affected Lobe
+        var checkboxes = document.querySelectorAll('input[name="consolidation.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Length
+        select = document.getElementsByName("consolidation.length")[0];
+        Observation.component[4].valueInteger = parseInt(select.value);
+
+        //Width
+        select = document.getElementsByName("consolidation.width")[0];
+        Observation.component[5].valueInteger = parseInt(select.value);
+    
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+
+</script>
 </body>
 </html>

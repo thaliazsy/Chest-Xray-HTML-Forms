@@ -17,19 +17,19 @@
     <legend><h1>Pulmonary consolidation 肺堅實化</h1></legend>
     <h2>affected side</h2>
     <label>location
-    <select id="consolidation.location">
+    <select name="consolidation.location">
         <option value="left">left</option>
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
     </select>
     <label>distribution
-    <select id="consolidation.distribution">
+    <select name="consolidation.distribution">
         <option value="central">central</option>
         <option value="eccentric">eccentric</option>
         <option value="peripheral">peripheral</option>
     </select>
     <label>density
-    <select id="consolidation.density">
+    <select name="consolidation.density">
         <option value="hyperdense">hyperdense</option>
         <option value="hypodense">hypodense</option>
         <option value="mixed-density">mixed density</option>
@@ -68,91 +68,91 @@
     //FHIR Observation JSON Object
     //ini templatenya
     var Observation = {
-            "resourceType": "Observation",
-            "subject": {
-                "reference": "Patient/1479506"
-            },
-            "component" : [{ //Tempat simpan hasil observation
-                "code" : {  //Kode Observasinya
-                    "coding" : [{ 
-                            "system" : "PulmonaryConsolidation", //Definisi (sistem) kodenya, format: nama formnya
-                            "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
-                        }
-                    ]},
-                "valueCodeableConcept": { //simpan value observasinya (yang di input)
-                    "coding": [{
-                            "system" : "PulmonaryConsolidation/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
-                            "code" : "", // value (yg kita input di website)
-                        }
-                    ]}
-                },
-                {"code" : { 
-                    "coding" : [{ 
-                        "system" : "PulmonaryConsolidation", 
-                        "code" : "AffectedSide/Distribution"
-                    }]},
-                "valueCodeableConcept": {
-                    "coding": [{
-                            "system" : "PulmonaryConsolidation/AffectedSide/Distribution",
-                            "code" : ""
-                        }
-                    ]}
-                },
-                {"code" : { 
-                    "coding" : [{ 
-                        "system" : "PulmonaryConsolidation", 
-                        "code" : "AffectedSide/Density",
-                    }]},
-                "valueCodeableConcept": {
-                    "coding": [{
-                            "system" : "PulmonaryConsolidation/AffectedSide/Density",
-                            "code" : ""
-                        }
-                    ]}
-                },
-                {"code" : { 
-                    "coding" : [{ 
-                        "system" : "PulmonaryConsolidation", 
-                        "code" : "AffectedLobe"
-                    }]},
-                "valueCodeableConcept": {
-                    "coding": [{
-                            "system" : "PulmonaryConsolidation/AffectedLobe",
-                            "code" : ""
-                        }
-                    ]}
-                },
-                {"code" : { 
-                    "coding" : [{ 
-                        "system" : "PulmonaryConsolidation", 
-                        "code" : "Size/Length"
-                    }]},
-                "valueInteger":0
-                },
-                {"code" : { 
-                    "coding" : [{ 
-                        "system" : "PulmonaryConsolidation", 
-                        "code" : "Size/Width"
-                    }]},
-                "valueInteger":0
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", //Definisi (sistem) kodenya, format: nama formnya
+                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
                 }
-            ]
-        }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                    "system" : "PulmonaryConsolidation/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                    "code" : "", // value (yg kita input di website)
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "AffectedSide/Distribution"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "PulmonaryConsolidation/AffectedSide/Distribution",
+                        "code" : ""
+                    }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "AffectedSide/Density",
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "PulmonaryConsolidation/AffectedSide/Density",
+                    "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "AffectedLobe"
+                    }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "PulmonaryConsolidation/AffectedLobe",
+                    "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "Size/Length"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PulmonaryConsolidation", 
+                    "code" : "Size/Width"
+                }]},
+            "valueInteger":0
+            }
+        ]
+    }
 
     function submitBtnClick() {
         event.preventDefault();
         var select;
 
         //Affected Side
-        select = document.getElementById("consolidation.location");
+        select = document.getElementsByName("consolidation.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Distribution
-        select = document.getElementById("consolidation.distribution");
+        select = document.getElementsByName("consolidation.distribution")[0];
         Observation.component[1].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Density
-        select = document.getElementById("consolidation.density");
+        select = document.getElementsByName("consolidation.density")[0];
         Observation.component[2].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Affected Lobe

@@ -16,7 +16,7 @@
 <fieldset id="type10">
     <legend><h1>bronchiectasis 支氣管擴張</h1></legend>
     <h2>affected side</h2>
-    <select id="bronchiectasis.location">
+    <select name="bronchiectasis.location">
         <option value="left">left</option>         
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -112,7 +112,7 @@
         var select;
 
         //Affected Side
-        select = document.getElementById("bronchiectasis.location");
+        select = document.getElementsByName("bronchiectasis.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Affected Lobe

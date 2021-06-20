@@ -17,7 +17,7 @@
     <legend><h1>Nodular/Mass pattern 小結節類型</h1></legend>
     <h2>affected side</h2>
     <label>location
-    <select id="nodule.location">
+    <select name="nodule.location">
         <option value="left">left</option>
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -172,7 +172,7 @@
         var select;
 
         //Affected Side
-        select = document.getElementById("nodule.location");
+        select = document.getElementsByName("nodule.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Affected Lobe

@@ -17,7 +17,7 @@
     <legend><h1>pleural effusion 肋膜腔積水</h1></legend>
     <h2>affected side</h2>
     <label>location
-    <select id="pleural_effusion.location">
+    <select name="pleural_effusion.location">
         <option value="left">left</option>         
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
@@ -119,7 +119,7 @@
         var select;
 
         //Affected Side
-        select = document.getElementById("pleural_effusion.location");
+        select = document.getElementsByName("pleural_effusion.location")[0];
         Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
 
         //Affected Lobe

@@ -52,62 +52,6 @@
     const form = document.querySelector("form");
     form.addEventListener("submit", submitBtnClick);
 
-    //FHIR server
-    var fhir = {
-        "url": "https://hapi.fhir.org/baseR4/"
-    }
-
-    //FHIR Observation JSON Object
-    //ini templatenya
-    var Observation = {
-        "resourceType": "Observation",
-        "subject": {
-            "reference": "Patient/1479506"
-        },
-        "component" : [{ //Tempat simpan hasil observation
-            "code" : {  //Kode Observasinya
-                "coding" : [{ 
-                    "system" : "ThoracicEmpyema", //Definisi (sistem) kodenya, format: nama formnya
-                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
-                }]},
-            "valueCodeableConcept": { //simpan value observasinya (yang di input)
-                "coding": [{
-                    "system" : "ThoracicEmpyema/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
-                    "code" : "" // value (yg kita input di website)
-                }]}
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "ThoracicEmpyema", 
-                    "code" : "AffectedLobe"
-                }]},
-            "valueCodeableConcept": {
-                "coding": [{
-                    "system" : "ThoracicEmpyema/AffectedLobe",
-                     "code" : ""
-                }]}
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "ThoracicEmpyema", 
-                    "code" : "PleuralCavitySize"
-                }]},
-            "valueInteger":0
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "ThoracicEmpyema", 
-                    "code" : "Types"
-                }]},
-            "valueCodeableConcept": {
-                "coding": [{
-                        "system" : "ThoracicEmpyema/Types",
-                        "code" : ""
-                    }]}
-            }
-        ]
-    }
-
     function submitBtnClick() {
         event.preventDefault();
         var select;

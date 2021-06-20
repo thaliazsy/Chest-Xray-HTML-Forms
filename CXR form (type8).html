@@ -47,69 +47,12 @@
         <input type="checkbox" name="class9" value="9D">lung architectural distortion肺建築畸變
     </label>
 </fieldset>
-
 <br>
 <button id="submitBtn" onclick="submitBtnClick()">送出</button>
 </form>
 <script>
-        const form = document.querySelector("form");
+    const form = document.querySelector("form");
     form.addEventListener("submit", submitBtnClick);
-
-    //FHIR server
-    var fhir = {
-        "url": "https://hapi.fhir.org/baseR4/"
-    }
-
-    //FHIR Observation JSON Object
-    //ini templatenya
-    var Observation = {
-        "resourceType": "Observation",
-        "subject": {
-            "reference": "Patient/1479506"
-        },
-        "component" : [{ //Tempat simpan hasil observation
-            "code" : {  //Kode Observasinya
-                "coding" : [{ 
-                    "system" : "PleuralEffusion", //Definisi (sistem) kodenya, format: nama formnya
-                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
-                }]},
-            "valueCodeableConcept": { //simpan value observasinya (yang di input)
-                "coding": [{
-                    "system" : "PleuralEffusion/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
-                    "code" : "" // value (yg kita input di website)
-                }]}
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "PleuralEffusion", 
-                    "code" : "AffectedLobe"
-                }]},
-            "valueCodeableConcept": {
-                "coding": [{
-                    "system" : "PleuralEffusion/AffectedLobe",
-                     "code" : ""
-                }]}
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "PleuralEffusion", 
-                    "code" : "CavitySize"
-                }]},
-            "valueInteger":0
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "PleuralEffusion", 
-                    "code" : "Types"
-                }]},
-            "valueCodeableConcept": {
-                "coding": [{
-                        "system" : "PleuralEffusion/Types",
-                        "code" : ""
-                    }]}
-            }
-        ]
-    }
 
     function submitBtnClick() {
         event.preventDefault();

@@ -39,65 +39,12 @@
     <label for="fibrosis.length">length:<input type="text" name="fibrosis.length"></label>
     <label for="fibrosis.width">width:<input type="text" name="fibrosis.width"></label>
 </fieldset>
-
 <br>
 <button id="submitBtn" onclick="submitBtnClick()">送出</button>
 </form>
 <script>
     const form = document.querySelector("form");
     form.addEventListener("submit", submitBtnClick);
-
-    //FHIR server
-    var fhir = {
-        "url": "https://hapi.fhir.org/baseR4/"
-    }
-
-    //FHIR Observation JSON Object
-    //ini templatenya
-    var Observation = {
-        "resourceType": "Observation",
-        "subject": {
-            "reference": "Patient/1479506"
-        },
-        "component" : [{ //Tempat simpan hasil observation
-            "code" : {  //Kode Observasinya
-                "coding" : [{ 
-                    "system" : "Fibrosis", //Definisi (sistem) kodenya, format: nama formnya
-                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
-                }]},
-            "valueCodeableConcept": { //simpan value observasinya (yang di input)
-                "coding": [{
-                    "system" : "Fibrosis/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
-                    "code" : "" // value (yg kita input di website)
-                }]}
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "Fibrosis", 
-                    "code" : "AffectedLobe"
-                }]},
-            "valueCodeableConcept": {
-                "coding": [{
-                    "system" : "Fibrosis/AffectedLobe",
-                     "code" : ""
-                }]}
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "Fibrosis", 
-                    "code" : "Size/Length"
-                }]},
-            "valueInteger":0
-            },
-            {"code" : { 
-                "coding" : [{ 
-                    "system" : "Fibrosis", 
-                    "code" : "Size/Width"
-                }]},
-            "valueInteger":0
-            }
-        ]
-    }
 
     function submitBtnClick() {
         event.preventDefault();

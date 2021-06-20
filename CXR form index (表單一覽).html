@@ -376,8 +376,6 @@
     const form = document.querySelector("form");
     form.addEventListener("submit", submitBtnClick);
     
-       
-
     function submitBtnClick() {
         event.preventDefault();
         var select;
@@ -418,19 +416,6 @@
         win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
 
         HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
-    }
-
-    function HTTPPostData(urlStr, dataStr) {
-        var HttpObj = new XMLHttpRequest();
-        HttpObj.open("POST", urlStr, true);
-        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
-        HttpObj.onreadystatechange = function () {
-                if (HttpObj.readyState === 4) {
-                ret = HttpObj.responseText;
-                alert(ret);
-            }   
-        }
-        HttpObj.send(dataStr);
     }
 
 </script>

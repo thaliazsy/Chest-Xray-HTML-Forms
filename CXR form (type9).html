@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Fibrosis</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type9">
+    <legend><h1>fibrosis 肺纖維化</h1></legend>
+    <h2>affected side</h2>
+    <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    <h2>affectd lobe</h2>
+    <input type="checkbox" name="fibrosis.position" value="LUL">
+    <label for="fibrosis.position">upper left lobe</label>
+    <input type="checkbox" name="fibrosis.position" value="LML">
+    <label for="fibrosis.position">middle left lobe</label>
+    <input type="checkbox" name="fibrosis.position" value="LLL">
+    <label for="fibrosis.position">lower left lobe</label>
+    <input type="checkbox" name="fibrosis.position" value="RUL">
+    <label for="fibrosis.position">upper right lobe</label>
+    <input type="checkbox" name="fibrosis.position" value="RML">
+    <label for="fibrosis.position">middle right lobe</label>
+    <input type="checkbox" name="fibrosis.position" value="RLL">
+    <label for="fibrosis.position">lower right lobe</label>
+    <h2>size</h2>
+    <label for="consolidation.length">length:<input type="text" name="consolidation.length"></label>
+    <label for="consolidation.width">width:<input type="text" name="consolidation.width"></label>
+</fieldset>
+
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+    
+</script>
+</body>
+</html>

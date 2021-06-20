@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Hyperlucent</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type6">
+    <legend><h1>hyperlucenct Lung 肺透亮類型</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+     <select id="hyperlucency.location">
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>affectd lobe</h2>
+    <input type="checkbox" name="hyperlucency.position" value="LUL">
+    <label for="hyperlucency.position">upper left lobe</label>
+    <input type="checkbox" name="hyperlucency.position" value="LML">
+    <label for="hyperlucency.position">middle left lobe</label>
+    <input type="checkbox" name="hyperlucency.position" value="LLL">
+    <label for="hyperlucency.position">lower left lobe</label>
+    <input type="checkbox" name="hyperlucency.position" value="RUL">
+    <label for="hyperlucency.position">upper right lobe</label>
+    <input type="checkbox" name="hyperlucency.position" value="RML">
+    <label for="hyperlucency.position">middle right lobe</label>
+    <input type="checkbox" name="hyperlucency.position" value="RLL">
+    <label for="hyperlucency.position">lower right lobe</label>
+    <h2>size</h2>
+    <label for="hyperlucency.length">length:<input type="text" name="hyperlucency.length"></label>
+    <label for="hyperlucency.width">width:<input type="text" name="hyperlucency.width"></label>
+    <h2>types</h2>
+    <label>
+    <input type="radio" name="class7" value="7A">central lobe 小葉中心型
+    <input type="radio" name="class7" value="7B">Panlobular 全小葉型
+    <input type="radio" name="class7" value="7C">paraseptal 間隔旁型
+    <input type="radio" name="class7" value="7D">peripheral pulmonary scar瘢痕旁型
+    </label>
+</fieldset>
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                    "system" : "HyperlucenctLung", //Definisi (sistem) kodenya, format: nama formnya
+                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
+                }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                    "system" : "HyperlucenctLung/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                    "code" : "", // value (yg kita input di website)
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "HyperlucenctLung", 
+                    "code" : "AffectedLobe"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "HyperlucenctLung/AffectedLobe",
+                     "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "HyperlucenctLung", 
+                    "code" : "Size/Length"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "HyperlucenctLung", 
+                    "code" : "Size/Width"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "HyperlucenctLung", 
+                    "code" : "Types"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "HyperlucenctLung/Types",
+                        "code" : ""
+                    }
+                ]}
+            }
+        ]
+    }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementById("hyperlucency.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Affected Lobe
+        var checkboxes = document.querySelectorAll('input[name="hyperlucency.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Length
+        select = document.getElementsByName("hyperlucency.length")[0];
+        Observation.component[2].valueInteger = parseInt(select.value);
+
+        //Width
+        select = document.getElementsByName("hyperlucency.width")[0];
+        Observation.component[3].valueInteger = parseInt(select.value);
+
+        //Types
+        select = document.querySelectorAll('input[name="class7"]');
+        for (const rb of select) {
+            if (rb.checked) {
+                Observation.component[4].valueCodeableConcept.coding[0].code = rb.value;
+                break;
+            }
+        }
+
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+
+</script>
+</body>
+</html>

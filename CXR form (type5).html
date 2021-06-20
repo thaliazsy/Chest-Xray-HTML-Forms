@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Atelectasis</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type5">
+    <legend><h1>atelectasis 肺塌陷類型</h1></legend>
+    <h2>affectd lobe
+    </h2>
+    <label>location
+     <select id="atelectasis.location">
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="atelectasis.position" value="LUL">
+    <label for="atelectasis.position">upper left lobe</label>
+    <input type="checkbox" name="atelectasis.position" value="LML">
+    <label for="atelectasis.position">middle left lobe</label>
+    <input type="checkbox" name="atelectasis.position" value="LLL">
+    <label for="atelectasis.position">lower left lobe</label>
+    <input type="checkbox" name="atelectasis.position" value="RUL">
+    <label for="atelectasis.position">upper right lobe</label>
+    <input type="checkbox" name="atelectasis.position" value="RML">
+    <label for="atelectasis.position">middle right lobe</label>
+    <input type="checkbox" name="atelectasis.position" value="RLL">
+    <label for="atelectasis.position">lower right lobe</label>
+    <h2>size</h2>
+    <label for="atelectasis.area">atelectasis area<input type="text" name="atelectasis.area"> %</label>
+    <h2>types</h2>
+    <h3>solid distress or not</h3>
+    <label>
+        <input type="checkbox" name="class5" value="5A">yes
+        <input type="checkbox" name="class5" value="5B">no
+    </label>
+    <h3><h3>
+    <label>
+        <input type="checkbox" name="class6" value="6A">chronic 慢性型
+        <input type="checkbox" name="class6" value="6B">acute 突發型
+    </label>
+</fieldset>
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                        "system" : "Atelectasis", //Definisi (sistem) kodenya, format: nama formnya
+                        "code" : "AffectedLobe/Location" //simpan kodenya->format: observation/kolom
+                    }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                        "system" : "Atelectasis/AffectedLobe/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                        "code" : "", // value (yg kita input di website)
+                    }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Atelectasis", 
+                    "code" : "Position"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "Atelectasis/Position",
+                        "code" : ""
+                    }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Atelectasis", 
+                    "code" : "Size/Area"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Atelectasis", 
+                    "code" : "Types/SolidDistress"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "Atelectasis/Types/SolidDistress",
+                    "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Atelectasis", 
+                    "code" : "Types/SolidDistressDesc"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "Atelectasis/Types/SolidDistressDesc",
+                        "code" : ""
+                    }
+                ]}
+            }
+        ]
+    }
+
+    function submitBtnClick(event) {
+        event.preventDefault();
+        var select;
+
+        //Affected Lobe Location
+        select = document.getElementById("atelectasis.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Position
+        var checkboxes = document.querySelectorAll('input[name="atelectasis.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Size
+        select = document.getElementsByName("atelectasis.area")[0];
+        Observation.component[2].valueInteger = parseInt(select.value);
+
+        //Types
+        checkboxes = document.querySelectorAll('input[name="class5"]');
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Types Desc
+        checkboxes = document.querySelectorAll('input[name="class6"]');
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[4].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//upload ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+
+</script>
+</body>
+</html>

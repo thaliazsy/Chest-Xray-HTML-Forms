@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Ground Glass Opacity</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type2">
+    <legend><h1>ground glass opacity 毛玻璃狀陰影</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select id="ground_glass_opacity.location">
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>affected lobe</h2>
+    <input type="checkbox" name="ground_glass_opacity.position" value="LUL">
+    <label for="ground_glass_opacity.position">upper left lobe</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="LML">
+    <label for="ground_glass_opacity.position">middle left lobe</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="LLL">
+    <label for="ground_glass_opacity.position">lower left lobe</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="RUL">
+    <label for="ground_glass_opacity.position">upper right lobe</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="RML">
+    <label for="ground_glass_opacity.position">middle right lobe</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="RLL">
+    <label for="ground_glass_opacity.position">lower right lobe</label>
+    <h2>size</h2>
+    <label for="ground_glass_opacity.length">length:<input type="text" name="ground_glass_opacity.length"></label>
+    <label for="ground_glass_opacity.width">width:<input type="text" name="ground_glass_opacity.width"></label>
+    <h2>types</h2>
+    <label>
+    <input type="radio" name="class1" value="1A">localized
+    <input type="radio" name="class1" value="1B">diffuse
+    </label>
+</fieldset>
+<br>
+<input type="submit" value="送出" action="#" method="GET" target="_blank">
+</form>
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                    "system" : "GroundGlassOpacity", //Definisi (sistem) kodenya, format: nama formnya
+                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
+                }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                    "system" : "GroundGlassOpacity/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                    "code" : "", // value (yg kita input di website)
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "GroundGlassOpacity", 
+                    "code" : "AffectedLobe"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "GroundGlassOpacity/AffectedLobe",
+                     "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "GroundGlassOpacity", 
+                    "code" : "Size/Length"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "GroundGlassOpacity", 
+                    "code" : "Size/Width"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "GroundGlassOpacity", 
+                    "code" : "Types"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "GroundGlassOpacity/Types",
+                        "code" : ""
+                    }
+                ]}
+            }
+        ]
+    }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementById("ground_glass_opacity.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Affected Lobe
+        var checkboxes = document.querySelectorAll('input[name="ground_glass_opacity.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Length
+        select = document.getElementsByName("ground_glass_opacity.length")[0];
+        Observation.component[2].valueInteger = parseInt(select.value);
+
+        //Width
+        select = document.getElementsByName("ground_glass_opacity.width")[0];
+        Observation.component[3].valueInteger = parseInt(select.value);
+
+        //Types
+        select = document.querySelectorAll('input[name="class1"]');
+        for (const rb of select) {
+            if (rb.checked) {
+                Observation.component[4].valueCodeableConcept.coding[0].code = rb.value;
+                break;
+            }
+        }
+
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        //HttpObj.setRequestHeader("Content-type", "application/xml+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                //document.getElementById("TextArea1").value = ret;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+
+</script>
+</body>
+</html>

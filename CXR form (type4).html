@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Miliary Tuberculosis</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type4">
+    <legend><h1>miliary tuberculosis 粟粒類型</h1></legend>
+    <h2>affectd lobe</h2>
+    <label>location
+    <select id="miliary_tb.location">
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="miliary_tb.position" value="LUL">
+    <label for="miliary_tb.position">upper left lobe</label>
+    <input type="checkbox" name="miliary_tb.position" value="LML">
+    <label for="miliary_tb.position">middle left lobe</label>
+    <input type="checkbox" name="miliary_tb.position" value="LLL">
+    <label for="miliary_tb.position">lower left lobe</label>
+    <input type="checkbox" name="miliary_tb.position" value="RUL">
+    <label for="miliary_tb.position">upper right lobe</label>
+    <input type="checkbox" name="miliary_tb.position" value="RML">
+    <label for="miliary_tb.position">middle right lobe</label>
+    <input type="checkbox" name="miliary_tb.position" value="RLL">
+    <label for="miliary_tb.position">lower right lobe</label>
+    <h2>avadanced location</h2>
+    <label for="position2">Internal lobe</label>
+    <input type="radio" name="position2" value="2.1">
+    <label for="position2">pleura</label>
+    <input type="radio" name="position2" value="2.2">
+    <label label for="position2">interlobe</label>
+    <input type="radio" name="position2" value="2.3">
+    <h2>size</h2>
+    <label for="miliary_tb.diameter">diameter<input type="text" name="miliary_tb.diameter"> cm</label>
+    <h2>types</h2>
+    <label>
+    <input type="checkbox" name="class4" value="4A">random 隨機型
+    <input type="checkbox" name="class4" value="4B">perilymphatic 淋巴周圍分布型
+    <input type="checkbox" name="class4" value="4C">centrilobular 中間小葉分布型
+    </label>
+</fieldset>
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+            "resourceType": "Observation",
+            "subject": {
+                "reference": "Patient/1479506"
+            },
+            "component" : [{ //Tempat simpan hasil observation
+                "code" : {  //Kode Observasinya
+                    "coding" : [{ 
+                            "system" : "MiliaryTuberculosis", //Definisi (sistem) kodenya, format: nama formnya
+                            "code" : "AffectedLobe/Location" //simpan kodenya->format: observation/kolom
+                        }
+                    ]},
+                "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                    "coding": [{
+                            "system" : "MiliaryTuberculosis/AffectedLobe/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                            "code" : "", // value (yg kita input di website)
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "MiliaryTuberculosis", 
+                        "code" : "Position"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "MiliaryTuberculosis/Position",
+                            "code" : ""
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "MiliaryTuberculosis", 
+                        "code" : "AdvancedLocation"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "MiliaryTuberculosis/AdvancedLocation",
+                            "code" : ""
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "MiliaryTuberculosis", 
+                        "code" : "Size/Diameter"
+                    }]},
+                "valueInteger":0
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "MiliaryTuberculosis", 
+                        "code" : "Types"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "MiliaryTuberculosis/Types",
+                            "code" : ""
+                        }
+                    ]}
+                }
+            ]
+        }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementById("miliary_tb.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Position
+        var checkboxes = document.querySelectorAll('input[name="miliary_tb.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Advanced Location
+        select = document.querySelectorAll('input[name="position2"]');
+        for (const rb of select) {
+            if (rb.checked) {
+                Observation.component[2].valueCodeableConcept.coding[0].code = rb.value;
+                break;
+            }
+        }
+
+        //Width
+        select = document.getElementsByName("miliary_tb.diameter")[0];
+        Observation.component[3].valueInteger = parseInt(select.value);
+
+        //Types
+        checkboxes = document.querySelectorAll('input[name="class4"]');
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[4].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        var ObservationStr = JSON.stringify(Observation);
+        
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//upload ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+
+</script>
+</body>
+</html>

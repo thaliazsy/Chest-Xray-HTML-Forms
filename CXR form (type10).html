@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Bronchiectasis</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type10">
+    <legend><h1>bronchiectasis 支氣管擴張</h1></legend>
+    <h2>affected side</h2>
+    <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    <h2>affectd lobe</h2>
+    <input type="checkbox" name="bronchiectasis.position" value="center">
+    <label for="bronchiectasis.position">central bronchiectasis中央支氣管擴張</label>
+    <input type="checkbox" name="bronchiectasis.position" value="UL">
+    <label for="bronchiectasis.position">upper lobe bronchiectasis上葉支氣管擴張</label>
+    <input type="checkbox" name="bronchiectasis.position" value="ML">
+    <label for="bronchiectasis.position">middle lobe bronchiectasis中葉支氣管擴張</label>
+    <input type="checkbox" name="bronchiectasis.position" value="LL">
+    <label for="bronchiectasis.position">lower lobe bronchiectasis下葉支氣管擴張</label>
+    <h2>size</h2>
+    <label for="bronchiectasis.expansion">expansion <input type="text" name="bronchiectasis.expansion"> 倍</label>
+    <h2>types</h2>
+    <label>
+        <input type="checkbox" type="class10" value="10A">cylindrical圓柱形
+        <input type="checkbox" type="class10" value="10B">varicose曲張型
+        <input type="checkbox" type="class10" value="10C">cystic囊性
+        <input type="checkbox" type="class10" value="10D">traction bronchiectasis牽引性支氣管擴張
+    </label>
+</fieldset>
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+    
+</script>
+</body>
+</html>

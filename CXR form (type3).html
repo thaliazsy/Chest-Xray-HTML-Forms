@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Nodular Pattern</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type3">
+    <legend><h1>Nodular/Mass pattern 小結節類型</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select id="nodule.location">
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>affected lobe</h2>
+    <input type="checkbox" name="nodule.position" value="LUL">
+    <label for="nodule.position">upper left lobe</label>
+    <input type="checkbox" name="nodule.position" value="LML">
+    <label for="nodule.position">middle left lobe</label>
+    <input type="checkbox" name="nodule.position" value="LLL">
+    <label for="nodule.position">lower left lobe</label>
+    <input type="checkbox" name="nodule.position" value="RUL">
+    <label for="nodule.position">upper right lobe</label>
+    <input type="checkbox" name="nodule.position" value="RML">
+    <label for="nodule.position">middle right lobe</label>
+    <input type="checkbox" name="nodule.position" value="RLL">
+    <label for="nodule.position">lower right lobe</label>
+    <h2>avadanced location</h2>
+    <label for="position1">Internal lobe</label>
+    <input type="radio" name="position1" value="1.1">
+    <label for="position1">pleura</label>
+    <input type="radio" name="position1" value="1.2">
+    <label for="position1">interlobe</label>
+    <input type="radio" name="position1" value="1.3">
+    <h2>image position</h2>
+    <label>x:<input type="text" name="nodule.x">y:<input type="text" name="nodule.y"></label>
+    <h2>size</h2>
+    <label for="nodule.diameter">diameter<input type="text" name="nodule.diameter"> cm</label>
+    <h2>types</h2>
+    <h3>calcification</h3>
+    <label>
+    <input type="checkbox" name="class2" value="2A">central 向心性
+    <input type="checkbox" name="class2" value="2B">punctate 點狀
+    <input type="checkbox" name="class2" value="2C">popcorn form 爆米花狀
+    <input type="checkbox" name="class2" value="2D">particularly central 局部偏中心
+    </label>
+    <h3>cavitation</h3>
+    <label>
+    <input type="checkbox" name="class3" value="3A">eroded cavitation 蟲蝕樣
+    <input type="checkbox" name="class3" value="3B">thick wall cavitation 厚壁
+    <input type="checkbox" name="class3" value="3C">thin wall cavitation 薄壁
+    </label>
+</fieldset>
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+    
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+            "resourceType": "Observation",
+            "subject": {
+                "reference": "Patient/1479506"
+            },
+            "component" : [{ //Tempat simpan hasil observation
+                "code" : {  //Kode Observasinya
+                    "coding" : [{ 
+                            "system" : "NodularMassPattern", //Definisi (sistem) kodenya, format: nama formnya
+                            "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
+                        }
+                    ]},
+                "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                    "coding": [{
+                            "system" : "NodularMassPattern/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                            "code" : "", // value (yg kita input di website)
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "AffectedLobe"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "NodularMassPattern/AffectedLobe",
+                            "code" : ""
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "AdvancedLocation"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "NodularMassPattern/AdvancedLocation",
+                            "code" : ""
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "ImagePosition/X"
+                    }]},
+                "valueInteger":0
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "ImagePosition/Y"
+                    }]},
+                "valueInteger":0
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "Size/Diameter"
+                    }]},
+                "valueInteger":0
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "Types/Calcification"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "NodularMassPattern/Types/Calcification",
+                            "code" : ""
+                        }
+                    ]}
+                },
+                {"code" : { 
+                    "coding" : [{ 
+                        "system" : "NodularMassPattern", 
+                        "code" : "Types/Cavitation"
+                    }]},
+                "valueCodeableConcept": {
+                    "coding": [{
+                            "system" : "NodularMassPattern/Types/Cavitation",
+                            "code" : ""
+                        }
+                    ]}
+                }
+            ]
+        }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementById("nodule.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Affected Lobe
+        var checkboxes = document.querySelectorAll('input[name="nodule.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Advanced Location
+        select = document.querySelectorAll('input[name="position1"]');
+        for (const rb of select) {
+            if (rb.checked) {
+                Observation.component[2].valueCodeableConcept.coding[0].code = rb.value;
+                break;
+            }
+        }
+
+        //Image Position X
+        select = document.getElementsByName("nodule.x")[0];
+        Observation.component[3].valueInteger = parseInt(select.value);
+
+        //ImagePosition Y
+        select = document.getElementsByName("nodule.y")[0];
+        Observation.component[4].valueInteger = parseInt(select.value);
+
+        //Size
+        select = document.getElementsByName("nodule.diameter")[0];
+        Observation.component[5].valueInteger = parseInt(select.value);
+
+        //Calcification
+        var checkboxes = document.querySelectorAll('input[name="class2"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[6].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Cavitation
+        var checkboxes = document.querySelectorAll('input[name="class3"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[7].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+
+</script>
+</body>
+</html>

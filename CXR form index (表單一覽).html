@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+
+<fieldset id="type1">
+    <legend><h1>Pulmonary consolidation 肺堅實化</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select name="consolidation.side">
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    <label>distribution
+    <select name="consolidation.distribution">
+        <option value="central">central</option>
+        <option value="eccentric">eccentric</option>
+        <option value="peripheral">peripheral</option>
+    </select>
+    <label>density
+    <select name="consolidation.density">
+        <option value="hyperdense">hyperdense</option>
+        <option value="hypodense">hypodense</option>
+        <option value="mixed density">mixed density</option>
+    </select>         
+         
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="consolidation.position" value="LUL">
+    <label for="consolidation.position">upper left</label>
+    <input type="checkbox" name="consolidation.position" value="LML">
+    <label for="consolidation.position">middle left</label>
+    <input type="checkbox" name="consolidation.position" value="LLL">
+    <label for="consolidation.position">lower left</label>
+    <input type="checkbox" name="consolidation.position" value="RUL">
+    <label for="consolidation.position">Upper right</label>
+    <input type="checkbox" name="consolidation.position" value="RML">
+    <label for="consolidation.position">middle right</label>
+    <input type="checkbox" name="consolidation.position" value="RLL">
+    <label for="consolidation.position">lower right</label>
+    <h2>size</h2>
+    <label for="consolidation.length">length:<input type="text" name="consolidation.length"></label>
+    <label for="consolidation.width">width:<input type="text" name="consolidation.width"></label>
+</fieldset>
+
+<fieldset id="type2">
+    <legend><h1>ground glass opacity 毛玻璃狀陰影</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select>
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="ground_glass_opacity.position" value="LUL">
+    <label for="ground_glass_opacity.position">upper left</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="LML">
+    <label for="ground_glass_opacity.position">middle left</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="LLL">
+    <label for="ground_glass_opacity.position">lower left</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="RUL">
+    <label for="ground_glass_opacity.position">Upper right</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="RML">
+    <label for="ground_glass_opacity.position">middle right</label>
+    <input type="checkbox" name="ground_glass_opacity.position" value="RLL">
+    <label for="ground_glass_opacity.position">lower right</label>
+    <h2>size</h2>
+    <label for="ground_glass_opacity.length">length:<input type="text" name="ground_glass_opacity.length"></label>
+    <label for="ground_glass_opacity.width">width:<input type="text" name="ground_glass_opacity.width"></label>
+    <h2>types</h2>
+    <label>
+    <input type="radio" name="class1" value="1A">localized
+    <input type="radio" name="class1" value="1B">diffuse
+    </label>
+</fieldset>
+
+<fieldset id="type3">
+    <legend><h1>Nodular/Mass pattern 小結節類型</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select>
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="nodule.position" value="LUL">
+    <label for="nodule.position">upper left</label>
+    <input type="checkbox" name="nodule.position" value="LML">
+    <label for="nodule.position">middle left</label>
+    <input type="checkbox" name="nodule.position" value="LLL">
+    <label for="nodule.position">lower left</label>
+    <input type="checkbox" name="nodule.position" value="RUL">
+    <label for="nodule.position">Upper right</label>
+    <input type="checkbox" name="nodule.position" value="RML">
+    <label for="nodule.position">middle right</label>
+    <input type="checkbox" name="nodule.position" value="RLL">
+    <label for="nodule.position">lower right</label>
+    <h2>avadanced location</h2>
+    <label for="position1">Internal lobe</label>
+    <input type="radio" name="position1" value="1.1">
+    <label for="position1">pleura</label>
+    <input type="radio" name="position1" value="1.2">
+    <label for="position1">interlobe</label>
+    <input type="radio" name="position1" value="1.3">
+    <h2>size</h2>
+    <label for="nodule.diameter">diameter<input type="text" name="nodule.diameter"> cm</label>
+    <h2>types</h2>
+    <h3>calcification</h3>
+    <label>
+    <input type="checkbox" name="class2" value="2A">central 向心性
+    <input type="checkbox" name="class2" value="2B">punctate 點狀
+    <input type="checkbox" name="class2" value="2C">popcorn form 爆米花狀
+    <input type="checkbox" name="class2" value="2D">particularly central 局部偏中心
+    </label>
+    <h3>cavitation</h3>
+    <label>
+    <input type="checkbox" name="class3" value="3A">eroded cavitation 蟲蝕樣
+    <input type="checkbox" name="class3" value="3B">thick wall cavitation 厚壁
+    <input type="checkbox" name="class3" value="3C">thin wall cavitation 薄壁
+    </label>
+</fieldset>
+
+<fieldset id="type4">
+    <legend><h1>miliary tuberculosis 粟粒類型</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select>
+        <option value="left">left</option>
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="miliary_tb.position" value="LUL">
+    <label for="miliary_tb.position">upper left</label>
+    <input type="checkbox" name="miliary_tb.position" value="LML">
+    <label for="miliary_tb.position">middle left</label>
+    <input type="checkbox" name="miliary_tb.position" value="LLL">
+    <label for="miliary_tb.position">lower left</label>
+    <input type="checkbox" name="miliary_tb.position" value="RUL">
+    <label for="miliary_tb.position">upper right</label>
+    <input type="checkbox" name="miliary_tb.position" value="RML">
+    <label for="miliary_tb.position">middle right</label>
+    <input type="checkbox" name="miliary_tb.position" value="RLL">
+    <label for="miliary_tb.position">lower right</label>
+    <h2>avadanced location</h2>
+    <label for="position2">Internal lobe</label>
+    <input type="radio" name="position2" value="2.1">
+    <label for="position2">pleura</label>
+    <input type="radio" name="position2" value="2.2">
+    <label label for="position2">interlobe</label>
+    <input type="radio" name="position2" value="2.3">
+    <h2>size</h2>
+    <label for="miliary_tb.diameter">diameter<input type="text" name="miliary_tb.diameter"> cm</label>
+    <h2>types</h2>
+    <label>
+    <input type="checkbox" name="class4" value="4A">random 隨機型
+    <input type="checkbox" name="class4" value="4B">perilymphatic 淋巴周圍分布型
+    <input type="checkbox" name="class4" value="4C">centrilobular 中間小葉分布型
+    </label>
+</fieldset>
+
+<fieldset id="type5">
+    <legend><h1>atelectasis 肺塌陷類型</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+     <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="atelectasis.position" value="LUL">
+    <label for="atelectasis.position">upper left</label>
+    <input type="checkbox" name="atelectasis.position" value="LML">
+    <label for="atelectasis.position">middle left</label>
+    <input type="checkbox" name="atelectasis.position" value="LLL">
+    <label for="atelectasis.position">lower left</label>
+    <input type="checkbox" name="atelectasis.position" value="RUL">
+    <label for="atelectasis.position">upper right</label>
+    <input type="checkbox" name="atelectasis.position" value="RML">
+    <label for="atelectasis.position">middle right</label>
+    <input type="checkbox" name="atelectasis.position" value="RLL">
+    <label for="atelectasis.position">lower right</label>
+    <h2>size</h2>
+    <label for="atelectasis.area">atelectasis area<input type="text" name="atelectasis.area"> %</label>
+    <h2>types</h2>
+    <h3>solid distress or not</h3>
+    <label>
+        <input type="checkbox" name="class5" value="5A">yes
+        <input type="checkbox" name="class5" value="5B">no
+    </label>
+    <h3><h3>
+    <label>
+        <input type="checkbox" name="class6" value="6A">chronic 慢性型
+        <input type="checkbox" name="class6" value="6B">acute 突發型
+    </label>
+</fieldset>
+
+<fieldset id="type6">
+    <legend><h1>pneumotherax 肺透亮類型</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+     <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="hyperlucency.position" value="LUL">
+    <label for="hyperlucency.position">upper left</label>
+    <input type="checkbox" name="hyperlucency.position" value="LML">
+    <label for="hyperlucency.position">middle left</label>
+    <input type="checkbox" name="hyperlucency.position" value="LLL">
+    <label for="hyperlucency.position">lower left</label>
+    <input type="checkbox" name="hyperlucency.position" value="RUL">
+    <label for="hyperlucency.position">upper right</label>
+    <input type="checkbox" name="hyperlucency.position" value="RML">
+    <label for="hyperlucency.position">middle right</label>
+    <input type="checkbox" name="hyperlucency.position" value="RLL">
+    <label for="hyperlucency.position">lower right</label>
+    <h2>size</h2>
+    <label for="hyperlucency.length">length:<input type="text" name="hyperlucency.length"></label>
+    <label for="hyperlucency.width">width:<input type="text" name="hyperlucency.width"></label>
+    <h2>types</h2>
+    <label>
+    <input type="radio" name="class7" value="7A">central lobe 小葉中心型
+    <input type="radio" name="class7" value="7B">Panlobular 全小葉型
+    <input type="radio" name="class7" value="7C">paraseptal 間隔旁型
+    <input type="radio" name="class7" value="7D">peripheral pulmonary scar瘢痕旁型
+    </label>
+</fieldset>
+
+<fieldset id="type7">
+    <legend><h1>Thoracic Empyema 肺膿傷</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+     <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="lung_abscess.position" value="LUL">
+    <label for="lung_abscess.position">upper left</label>
+    <input type="checkbox" name="lung_abscess.position" value="LML">
+    <label for="lung_abscess.position">middle left</label>
+    <input type="checkbox" name="lung_abscess.position" value="LLL">
+    <label for="lung_abscess.position">lower left</label>
+    <input type="checkbox" name="lung_abscess.position" value="RUL">
+    <label for="lung_abscess.position">upper right</label>
+    <input type="checkbox" name="lung_abscess.position" value="RML">
+    <label for="lung_abscess.position">middle right</label>
+    <input type="checkbox" name="lung_abscess.position" value="RLL">
+    <label for="lung_abscess.position">lower right</label>
+    <h2>size</h2>
+    <label for="lung_abscess.pleural_cavity_size">pleural cavity size胸膜間距 <input type="text" id="lung_abscess.pleural_cavity_size"> cm</label>
+    <h2>types</h2>
+    <label>
+        <input type="radio" class="class8" value="8A">empyema膿胸
+        <input type="radio" class="class8" value="8B">pulmonary cyst肺囊腫
+    </label>
+</fieldset>
+
+<fieldset id="type8">
+    <legend><h1>pleural effusion 肋膜腔積水</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>position</h2>
+    <input type="checkbox" name="pleural_effusion.position" value="LUL">
+    <label for="pleural_effusion.position">upper left</label>
+    <input type="checkbox" name="pleural_effusion.position" value="LML">
+    <label for="pleural_effusion.position">middle left</label>
+    <input type="checkbox" name="pleural_effusion.position" value="LLL">
+    <label for="pleural_effusion.position">lower left</label>
+    <input type="checkbox" name="pleural_effusion.position" value="RUL">
+    <label for="pleural_effusion.position">upper right</label>
+    <input type="checkbox" name="pleural_effusion.position" value="RML">
+    <label for="pleural_effusion.position">middle right</label>
+    <input type="checkbox" name="pleural_effusion.position" value="RLL">
+    <label for="pleural_effusion.position">lower right</label>
+    <h2>size</h2>
+    <label for="pleural_effusion.cavity_size">pleural cavity size胸膜間距 <input type="text" name="pleural_effusion.cavity_size"> cm</label>
+    <h2>type</h2>
+    <label>
+        <input type="checkbox" name="class9" value="9A">honeycombing蜂窩狀
+        <input type="checkbox" name="class9" value="9B">reticulation網狀
+        <input type="checkbox" name="class9" value="9C">traction bronchiectasis牽引性支氣管擴張
+        <input type="checkbox" name="class9" value="9D">lung architectural distortion肺建築畸變
+    </label>
+</fieldset>
+
+<fieldset id="type9">
+    <legend><h1>fibrosis 肺纖維化</h1></legend>
+    <h2>affected side</h2>
+    <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    <h2>position</h2>
+    <input type="checkbox" name="fibrosis.position" value="LUL">
+    <label for="fibrosis.position">upper left</label>
+    <input type="checkbox" name="fibrosis.position" value="LML">
+    <label for="fibrosis.position">middle left</label>
+    <input type="checkbox" name="fibrosis.position" value="LLL">
+    <label for="fibrosis.position">lower left</label>
+    <input type="checkbox" name="fibrosis.position" value="RUL">
+    <label for="fibrosis.position">upper right</label>
+    <input type="checkbox" name="fibrosis.position" value="RML">
+    <label for="fibrosis.position">middle right</label>
+    <input type="checkbox" name="fibrosis.position" value="RLL">
+    <label for="fibrosis.position">lower right</label>
+    <h2>size</h2>
+    <label for="consolidation.length">length:<input type="text" name="consolidation.length"></label>
+    <label for="consolidation.width">width:<input type="text" name="consolidation.width"></label>
+</fieldset>
+
+<fieldset id="type10">
+    <legend><h1>bronchiectasis 支氣管擴張</h1></legend>
+    <h2>affected side</h2>
+    <select>
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    <h2>位置</h2>
+    <input type="checkbox" name="bronchiectasis.position" value="center">
+    <label for="bronchiectasis.position">central bronchiectasis中央支氣管擴張</label>
+    <input type="checkbox" name="bronchiectasis.position" value="UL">
+    <label for="bronchiectasis.position">upper lobe bronchiectasis上葉支氣管擴張</label>
+    <input type="checkbox" name="bronchiectasis.position" value="ML">
+    <label for="bronchiectasis.position">middle lobe bronchiectasis中葉支氣管擴張</label>
+    <input type="checkbox" name="bronchiectasis.position" value="LL">
+    <label for="bronchiectasis.position">lower lobe bronchiectasis下葉支氣管擴張</label>
+    <h2>size</h2>
+    <label for="bronchiectasis.expansion">expansion <input type="text" name="bronchiectasis.expansion"> 倍</label>
+    <h2>types</h2>
+    <label>
+        <input type="checkbox" type="class10" value="10A">cylindrical圓柱形
+        <input type="checkbox" type="class10" value="10B">varicose曲張型
+        <input type="checkbox" type="class10" value="10C">cystic囊性
+        <input type="checkbox" type="class10" value="10D">traction bronchiectasis牽引性支氣管擴張
+    </label>
+</fieldset>
+<br>
+<input type="submit" value="送出" action="#" method="GET" target="_blank">
+</form>
+</body>
+</html>

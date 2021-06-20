@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form id="select">
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="index">
+    <legend><h1>病變種類</h1></legend><br>
+    <input type="checkbox" name="type1" value="Pulmonary_Consolidation"><span  title="Consolidation occurs through accumulation of inflammatory cellular exudate in the alveoli and adjoining ducts. The liquid can be pulmonary edema, inflammatory exudate, pus, inhaled water, or blood (from bronchial tree or hemorrhage from a pulmonary artery).Typically, an area of white lung is seen on a standard X-ray.">Pulmonary Consolidation</span><br><br>
+    <input type="checkbox" name="type2" value="Ground_Glass_Opacity"><span  title="Ground-glass opacity is a radiological term indicating an area of hazy increased lung opacity through which vessels and bronchial structures may still be seen. It is less opaque than consolidation, in which such structures are obscured 1.">Ground Glass Opacity</span></input><br><br>
+    <input type="checkbox" name="type3" value="Modular_Pattern"><span title="The nodular pattern is characterised by the presence of multiple nodular opacities with a maximum diameter of 3 cm. A nodule with a diameter less than 1 cm can be defined as a small nodule, whereas a nodule larger than 1 cm is often called a large nodule">Nodular Pattern</span></input><br><br>
+    <input type="checkbox" name="type4" value="Miliary Tuberculosis"><span title="Miliary tuberculosis is the widespread dissemination of Mycobacterium tuberculosis via hematogenous spread. Classic miliary TB is defined as milletlike (mean, 2 mm; range, 1-5 mm) seeding of TB bacilli in the lung, as evidenced on chest radiography.">Miliary Tuberculosis</span></input><br><br>
+    <input type="checkbox" name="type5" value="Atelectasis"><span title="Atelectasis is the collapse or closure of a lung resulting in reduced or absent gas exchange. It is usually unilateral, affecting part or all of one lung. It is a condition where the alveoli are deflated down to little or no volume, as distinct from pulmonary consolidation, in which they are filled with liquid. It is often called a collapsed lung, although that term may also refer to pneumothorax.">Atelectasis</span></input><br><br>
+    <input type="checkbox" name="type6" value="Hyperlucent_Lung"><span  title="the radiographic finding that a lung or portion thereof is less dense than normal, as from air trapping by a bronchial foreign body, asymmetric emphysema, or decreasing blood flow.">Hyperlucent Lung</span></input><br><br>
+    <input type="checkbox" name="type7" value="Thoracic Empyema"><span title="thoracic empyema refers to an infected purulent and often loculated pleural effusion, and is a cause of a large unilateral pleural collection.">Thoracic Empyema</span></input><br><br>
+    <input type="checkbox" name="type8" value="Pleural_Effusion"><span  title="the presence of air or gas in the cavity between the lungs and the chest wall, causing collapse of the lung.">Pleural Effusion</span></input><br><br>
+    <input type="checkbox" name="type9" value="Fibrosis"><span title="Pulmonary fibrosis is a lung disease that occurs when lung tissue becomes damaged and scarred.">Fibrosis</span></input><br><br>
+    <input type="checkbox" name="type10" value="Bronchiectasis"><span title="It is a chronic lung condition, defined as the abnormal, irreversible dilatation of the bronchi, where the elastic and muscular tissue is destroyed by acute or chronic inflammation and infection.">Bronchiectasis</span></input><br><br>
+    <input type="submit" onclick="openWindow()"></input>
+</fieldset>
+</form>
+<script>
+    function openWindow(){
+        var boolean1=document.getElementById('select').type1.checked
+        if(boolean1==true){window.open('CXR form (type1).html');}
+        var boolean2=document.getElementById('select').type2.checked
+        if(boolean2==true){window.open('CXR form (type2).html');}
+        var boolean3=document.getElementById('select').type3.checked
+        if(boolean3==true){window.open('CXR form (type3).html');}
+        var boolean4=document.getElementById('select').type4.checked
+        if(boolean4==true){window.open('CXR form (type4).html');}
+        var boolean5=document.getElementById('select').type5.checked
+        if(boolean5==true){window.open('CXR form (type5).html');}
+        var boolean6=document.getElementById('select').type6.checked
+        if(boolean6==true){window.open('CXR form (type6).html');}
+        var boolean7=document.getElementById('select').type7.checked
+        if(boolean7==true){window.open('CXR form (type7).html');}
+        var boolean8=document.getElementById('select').type8.checked
+        if(boolean8==true){window.open('CXR form (type8).html');}
+        var boolean9=document.getElementById('select').type9.checked
+        if(boolean9==true){window.open('CXR form (type9).html');}
+        var boolean10=document.getElementById('select').type10.checked
+        if(boolean10==true){window.open('CXR form (type10).html');}
+    }
+</script>
+</body>
+</html>

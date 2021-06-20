@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CXR Reading - Pleural Effusion</title>
+<style>
+    body{font-family: Microsoft JhengHei;}
+    h{font-size: 42px;font-weight: bold;}
+    h1{font-weight: bold;}
+    h2{font-weight: normal;}
+    h3{font-weight: normal;}
+</style>
+</head>
+<body>
+<form>
+<h>胸部X光判讀 - 病變種類紀錄表單</h>
+<fieldset id="type8">
+    <legend><h1>pleural effusion 肋膜腔積水</h1></legend>
+    <h2>affected side</h2>
+    <label>location
+    <select id="pleural_effusion.location">
+        <option value="left">left</option>         
+        <option value="right">right</option>
+        <option value="bilateral">bilateral</option>
+    </select>
+    </label>
+    <h2>affected lobe</h2>
+    <input type="checkbox" name="pleural_effusion.position" value="LUL">
+    <label for="pleural_effusion.position">upper left lobe</label>
+    <input type="checkbox" name="pleural_effusion.position" value="LML">
+    <label for="pleural_effusion.position">middle left lobe</label>
+    <input type="checkbox" name="pleural_effusion.position" value="LLL">
+    <label for="pleural_effusion.position">lower left lobe</label>
+    <input type="checkbox" name="pleural_effusion.position" value="RUL">
+    <label for="pleural_effusion.position">upper right lobe</label>
+    <input type="checkbox" name="pleural_effusion.position" value="RML">
+    <label for="pleural_effusion.position">middle right lobe</label>
+    <input type="checkbox" name="pleural_effusion.position" value="RLL">
+    <label for="pleural_effusion.position">lower right lobe</label>
+    <h2>size</h2>
+    <label for="pleural_effusion.cavity_size">pleural cavity size胸膜間距 <input type="text" name="pleural_effusion.cavity_size"> cm</label>
+    <h2>type</h2>
+    <label>
+        <input type="checkbox" name="class9" value="9A">honeycombing蜂窩狀
+        <input type="checkbox" name="class9" value="9B">reticulation網狀
+        <input type="checkbox" name="class9" value="9C">traction bronchiectasis牽引性支氣管擴張
+        <input type="checkbox" name="class9" value="9D">lung architectural distortion肺建築畸變
+    </label>
+</fieldset>
+
+<br>
+<button id="submitBtn" onclick="submitBtnClick()">送出</button>
+</form>
+<script>
+        const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                    "system" : "PleuralEffusion", //Definisi (sistem) kodenya, format: nama formnya
+                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
+                }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                    "system" : "PleuralEffusion/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                    "code" : "", // value (yg kita input di website)
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PleuralEffusion", 
+                    "code" : "AffectedLobe"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "PleuralEffusion/AffectedLobe",
+                     "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PleuralEffusion", 
+                    "code" : "CavitySize"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "PleuralEffusion", 
+                    "code" : "Types"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "PleuralEffusion/Types",
+                        "code" : ""
+                    }
+                ]}
+            }
+        ]
+    }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementById("pleural_effusion.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Affected Lobe
+        var checkboxes = document.querySelectorAll('input[name="pleural_effusion.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Size
+        select = document.getElementsByName("pleural_effusion.cavity_size")[0];
+        Observation.component[2].valueInteger = parseInt(select.value);
+
+        //Types
+        var checkboxes = document.querySelectorAll('input[name="class9"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
+</script>
+</body>
+</html>

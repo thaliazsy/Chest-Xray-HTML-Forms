@@ -1,4 +1,4 @@
-type1:
+ type1:
 https://hapi.fhir.org/baseR4/Observation/2364000
 
 type2:
@@ -20,7 +20,10 @@ type7:
 https://hapi.fhir.org/baseR4/Observation/2364123
 
 type8:
+https://hapi.fhir.org/baseR4/Observation/2364124
 
 type9:
+https://hapi.fhir.org/baseR4/Observation/2364221
 
 type10:
+https://hapi.fhir.org/baseR4/Observation/2364222

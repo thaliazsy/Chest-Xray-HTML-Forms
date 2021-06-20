@@ -16,12 +16,12 @@
 <fieldset id="type10">
     <legend><h1>bronchiectasis 支氣管擴張</h1></legend>
     <h2>affected side</h2>
-    <select>
+    <select id="bronchiectasis.location">
         <option value="left">left</option>         
         <option value="right">right</option>
         <option value="bilateral">bilateral</option>
     </select>
-    <h2>affectd lobe</h2>
+    <h2>affected lobe</h2>
     <input type="checkbox" name="bronchiectasis.position" value="center">
     <label for="bronchiectasis.position">central bronchiectasis中央支氣管擴張</label>
     <input type="checkbox" name="bronchiectasis.position" value="UL">
@@ -34,17 +34,131 @@
     <label for="bronchiectasis.expansion">expansion <input type="text" name="bronchiectasis.expansion"> 倍</label>
     <h2>types</h2>
     <label>
-        <input type="checkbox" type="class10" value="10A">cylindrical圓柱形
-        <input type="checkbox" type="class10" value="10B">varicose曲張型
-        <input type="checkbox" type="class10" value="10C">cystic囊性
-        <input type="checkbox" type="class10" value="10D">traction bronchiectasis牽引性支氣管擴張
+        <input type="checkbox" name="class10" value="10A">cylindrical圓柱形
+        <input type="checkbox" name="class10" value="10B">varicose曲張型
+        <input type="checkbox" name="class10" value="10C">cystic囊性
+        <input type="checkbox" name="class10" value="10D">traction bronchiectasis牽引性支氣管擴張
     </label>
 </fieldset>
 <br>
 <button id="submitBtn" onclick="submitBtnClick()">送出</button>
 </form>
 <script>
-    
+            const form = document.querySelector("form");
+    form.addEventListener("submit", submitBtnClick);
+
+    //FHIR server
+    var fhir = {
+        "url": "https://hapi.fhir.org/baseR4/"
+    }
+
+    //FHIR Observation JSON Object
+    //ini templatenya
+    var Observation = {
+        "resourceType": "Observation",
+        "subject": {
+            "reference": "Patient/1479506"
+        },
+        "component" : [{ //Tempat simpan hasil observation
+            "code" : {  //Kode Observasinya
+                "coding" : [{ 
+                    "system" : "Bronchiectasis", //Definisi (sistem) kodenya, format: nama formnya
+                    "code" : "AffectedSide/Location" //simpan kodenya->format: observation/kolom
+                }
+                ]},
+            "valueCodeableConcept": { //simpan value observasinya (yang di input)
+                "coding": [{
+                    "system" : "Bronchiectasis/AffectedSide/Location", //definisi kode ->format: NamaForm/Kolom/Kolom
+                    "code" : "", // value (yg kita input di website)
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Bronchiectasis", 
+                    "code" : "AffectedLobe"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                    "system" : "Bronchiectasis/AffectedLobe",
+                     "code" : ""
+                }
+                ]}
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Bronchiectasis", 
+                    "code" : "Expansion"
+                }]},
+            "valueInteger":0
+            },
+            {"code" : { 
+                "coding" : [{ 
+                    "system" : "Bronchiectasis", 
+                    "code" : "Types"
+                }]},
+            "valueCodeableConcept": {
+                "coding": [{
+                        "system" : "Bronchiectasis/Types",
+                        "code" : ""
+                    }
+                ]}
+            }
+        ]
+    }
+
+    function submitBtnClick() {
+        event.preventDefault();
+        var select;
+
+        //Affected Side
+        select = document.getElementById("bronchiectasis.location");
+        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+        //Affected Lobe
+        var checkboxes = document.querySelectorAll('input[name="bronchiectasis.position"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        //Size
+        select = document.getElementsByName("bronchiectasis.expansion")[0];
+        Observation.component[2].valueInteger = parseInt(select.value);
+
+        //Types
+        var checkboxes = document.querySelectorAll('input[name="class10"]'); //ambil smua kotak
+        var checked = [];
+        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+            var checkbox = checkboxes[i];
+            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+        }
+        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+        Observation.component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+        var ObservationStr = JSON.stringify(Observation);
+
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
+        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+
+        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+    }
+
+    function HTTPPostData(urlStr, dataStr) {
+        var HttpObj = new XMLHttpRequest();
+        HttpObj.open("POST", urlStr, true);
+        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
+        HttpObj.onreadystatechange = function () {
+                if (HttpObj.readyState === 4) {
+                ret = HttpObj.responseText;
+                alert(ret);
+            }   
+        }
+        HttpObj.send(dataStr);
+    }
 </script>
 </body>
 </html>

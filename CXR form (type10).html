@@ -45,12 +45,13 @@
 <button id="submitBtn" onclick="submitBtnClick()">送出</button>
 </form>
 <script>
-            const form = document.querySelector("form");
+    const form = document.querySelector("form");
     form.addEventListener("submit", submitBtnClick);
 
     function submitBtnClick() {
         event.preventDefault();
         Observation["component"]=[];
+        
         addComponentsType10();
         
         var ObservationStr = JSON.stringify(Observation);
@@ -58,7 +59,7 @@
         var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
         win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
 
-        //HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+        HTTPPostData(fhir.url+"Observation", ObservationStr); //uplod ke fhir
     }
 </script>
 </body>

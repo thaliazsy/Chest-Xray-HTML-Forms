@@ -72,84 +72,17 @@
 
     function submitBtnClick() {
         event.preventDefault();
-        var select;
-
-        //Affected Side
-        select = document.getElementsByName("nodule.location")[0];
-        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
-
-        //Affected Lobe
-        var checkboxes = document.querySelectorAll('input[name="nodule.position"]'); //ambil smua kotak
-        var checked = [];
-        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
-            var checkbox = checkboxes[i];
-            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
-        }
-        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
-        Observation.component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
-
-        //Advanced Location
-        select = document.querySelectorAll('input[name="position1"]');
-        for (const rb of select) {
-            if (rb.checked) {
-                Observation.component[2].valueCodeableConcept.coding[0].code = rb.value;
-                break;
-            }
-        }
-
-        //Image Position X
-        select = document.getElementsByName("nodule.x")[0];
-        Observation.component[3].valueInteger = parseInt(select.value);
-
-        //ImagePosition Y
-        select = document.getElementsByName("nodule.y")[0];
-        Observation.component[4].valueInteger = parseInt(select.value);
-
-        //Size
-        select = document.getElementsByName("nodule.diameter")[0];
-        Observation.component[5].valueInteger = parseInt(select.value);
-
-        //Calcification
-        var checkboxes = document.querySelectorAll('input[name="class2"]'); //ambil smua kotak
-        var checked = [];
-        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
-            var checkbox = checkboxes[i];
-            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
-        }
-        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
-        Observation.component[6].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
-
-        //Cavitation
-        var checkboxes = document.querySelectorAll('input[name="class3"]'); //ambil smua kotak
-        var checked = [];
-        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
-            var checkbox = checkboxes[i];
-            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
-        }
-        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
-        Observation.component[7].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
-
+        Observation["component"]=[];
+        
+        addComponentsType3();
+        
         var ObservationStr = JSON.stringify(Observation);
 
         var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
         win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
 
-        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+        HTTPPostData(fhir.url+"Observation", ObservationStr); //uplod ke fhir
     }
-
-    function HTTPPostData(urlStr, dataStr) {
-        var HttpObj = new XMLHttpRequest();
-        HttpObj.open("POST", urlStr, true);
-        HttpObj.setRequestHeader("Content-type", "application/json+fhir");
-        HttpObj.onreadystatechange = function () {
-                if (HttpObj.readyState === 4) {
-                ret = HttpObj.responseText;
-                alert(ret);
-            }   
-        }
-        HttpObj.send(dataStr);
-    }
-
 </script>
 </body>
 </html>

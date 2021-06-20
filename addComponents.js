@@ -90,7 +90,39 @@ function addComponentsType1() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("consolidation.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Distribution
+    select = document.getElementsByName("consolidation.distribution")[0];
+    component[1].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Density
+    select = document.getElementsByName("consolidation.density")[0];
+    component[2].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="consolidation.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Length
+    select = document.getElementsByName("consolidation.length")[0];
+    component[4].valueInteger = parseInt(select.value);
+
+    //Width
+    select = document.getElementsByName("consolidation.width")[0];
+    component[5].valueInteger = parseInt(select.value);
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType2() {
@@ -145,7 +177,40 @@ function addComponentsType2() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("ground_glass_opacity.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="ground_glass_opacity.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Length
+    select = document.getElementsByName("ground_glass_opacity.length")[0];
+    component[2].valueInteger = parseInt(select.value);
+
+    //Width
+    select = document.getElementsByName("ground_glass_opacity.width")[0];
+    component[3].valueInteger = parseInt(select.value);
+
+    //Types
+    select = document.querySelectorAll('input[name="class1"]');
+    for (const rb of select) {
+        if (rb.checked) {
+            component[4].valueCodeableConcept.coding[0].code = rb.value;
+            break;
+        }
+    }
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType3() {
@@ -229,7 +294,64 @@ function addComponentsType3() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("nodule.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="nodule.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Advanced Location
+    select = document.querySelectorAll('input[name="position1"]');
+    for (const rb of select) {
+        if (rb.checked) {
+            component[2].valueCodeableConcept.coding[0].code = rb.value;
+            break;
+        }
+    }
+
+    //Image Position X
+    select = document.getElementsByName("nodule.x")[0];
+    component[3].valueInteger = parseInt(select.value);
+
+    //ImagePosition Y
+    select = document.getElementsByName("nodule.y")[0];
+    component[4].valueInteger = parseInt(select.value);
+
+    //Size
+    select = document.getElementsByName("nodule.diameter")[0];
+    component[5].valueInteger = parseInt(select.value);
+
+    //Calcification
+    var checkboxes = document.querySelectorAll('input[name="class2"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[6].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Cavitation
+    var checkboxes = document.querySelectorAll('input[name="class3"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[7].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType4() {
@@ -288,7 +410,46 @@ function addComponentsType4() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("miliary_tb.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Position
+    var checkboxes = document.querySelectorAll('input[name="miliary_tb.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Advanced Location
+    select = document.querySelectorAll('input[name="position2"]');
+    for (const rb of select) {
+        if (rb.checked) {
+            component[2].valueCodeableConcept.coding[0].code = rb.value;
+            break;
+        }
+    }
+
+    //Width
+    select = document.getElementsByName("miliary_tb.diameter")[0];
+    component[3].valueInteger = parseInt(select.value);
+
+    //Types
+    checkboxes = document.querySelectorAll('input[name="class4"]');
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[4].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType5() {
@@ -347,7 +508,47 @@ function addComponentsType5() {
         }
     ];
 
-    
+    var select;
+
+    //Affected Lobe Location
+    select = document.getElementsByName("atelectasis.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Position
+    var checkboxes = document.querySelectorAll('input[name="atelectasis.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Size
+    select = document.getElementsByName("atelectasis.area")[0];
+    component[2].valueInteger = parseInt(select.value);
+
+    //Types
+    checkboxes = document.querySelectorAll('input[name="class5"]');
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Types Desc
+    checkboxes = document.querySelectorAll('input[name="class6"]');
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[4].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType6() {
@@ -402,7 +603,40 @@ function addComponentsType6() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("hyperlucency.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="hyperlucency.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Length
+    select = document.getElementsByName("hyperlucency.length")[0];
+    component[2].valueInteger = parseInt(select.value);
+
+    //Width
+    select = document.getElementsByName("hyperlucency.width")[0];
+    component[3].valueInteger = parseInt(select.value);
+
+    //Types
+    select = document.querySelectorAll('input[name="class7"]');
+    for (const rb of select) {
+        if (rb.checked) {
+            component[4].valueCodeableConcept.coding[0].code = rb.value;
+            break;
+        }
+    }
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType7() {
@@ -450,7 +684,36 @@ function addComponentsType7() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("lung_abscess.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="lung_abscess.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Size
+    select = document.getElementsByName("lung_abscess.pleural_cavity_size")[0];
+    component[2].valueInteger = parseInt(select.value);
+
+    //Types
+    select = document.querySelectorAll('input[name="class8"]');
+    for (const rb of select) {
+        if (rb.checked) {
+            component[3].valueCodeableConcept.coding[0].code = rb.value;
+            break;
+        }
+    }
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType8() {
@@ -498,7 +761,37 @@ function addComponentsType8() {
         }
     ];
 
-    
+    var select;
+
+    //Affected Location
+    select = document.getElementsByName("pleural_effusion.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="pleural_effusion.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Size
+    select = document.getElementsByName("pleural_effusion.cavity_size")[0];
+    component[2].valueInteger = parseInt(select.value);
+
+    //Types
+    var checkboxes = document.querySelectorAll('input[name="class9"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType9() {
@@ -542,7 +835,31 @@ function addComponentsType9() {
         }
     ];
 
+    var select;
 
+    //Affected Location
+    select = document.getElementsByName("fibrosis.location")[0];
+    component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
+
+    //Affected Lobe
+    var checkboxes = document.querySelectorAll('input[name="fibrosis.position"]'); //ambil smua kotak
+    var checked = [];
+    for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
+        var checkbox = checkboxes[i];
+        if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
+    }
+    var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
+    component[1].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
+
+    //Length
+    select = document.getElementsByName("fibrosis.length")[0];
+    component[2].valueInteger = parseInt(select.value);
+
+    //Width
+    select = document.getElementsByName("fibrosis.width")[0];
+    component[3].valueInteger = parseInt(select.value);
+
+    Observation["component"] = Observation["component"].concat(component);
 }
 
 function addComponentsType10() {

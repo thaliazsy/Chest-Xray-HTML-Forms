@@ -119,6 +119,8 @@
     <input type="radio" name="position1" value="1.2">
     <label for="position1">interlobe</label>
     <input type="radio" name="position1" value="1.3">
+    <h2>image position</h2>
+    <label>x:<input type="text" name="nodule.x">y:<input type="text" name="nodule.y"></label>
     <h2>size</h2>
     <label for="nodule.diameter">diameter<input type="text" name="nodule.diameter"> cm</label>
     <h2>types</h2>
@@ -274,11 +276,11 @@
     <input type="checkbox" name="lung_abscess.position" value="RLL">
     <label for="lung_abscess.position">lower right</label>
     <h2>size</h2>
-    <label for="lung_abscess.pleural_cavity_size">pleural cavity size胸膜間距 <input type="text" id="lung_abscess.pleural_cavity_size"> cm</label>
+    <label for="lung_abscess.pleural_cavity_size">pleural cavity size胸膜間距 <input type="text" name="lung_abscess.pleural_cavity_size"> cm</label>
     <h2>types</h2>
     <label>
-        <input type="radio" class="class8" value="8A">empyema膿胸
-        <input type="radio" class="class8" value="8B">pulmonary cyst肺囊腫
+        <input type="radio" name="class8" value="8A">empyema膿胸
+        <input type="radio" name="class8" value="8B">pulmonary cyst肺囊腫
     </label>
 </fieldset>
 
@@ -338,8 +340,8 @@
     <input type="checkbox" name="fibrosis.position" value="RLL">
     <label for="fibrosis.position">lower right</label>
     <h2>size</h2>
-    <label for="consolidation.length">length:<input type="text" name="consolidation.length"></label>
-    <label for="consolidation.width">width:<input type="text" name="consolidation.width"></label>
+    <label for="fibrosis.length">length:<input type="text" name="fibrosis.length"></label>
+    <label for="fibrosis.width">width:<input type="text" name="fibrosis.width"></label>
 </fieldset>
 
 <fieldset id="type10">
@@ -363,10 +365,10 @@
     <label for="bronchiectasis.expansion">expansion <input type="text" name="bronchiectasis.expansion"> 倍</label>
     <h2>types</h2>
     <label>
-        <input type="checkbox" type="class10" value="10A">cylindrical圓柱形
-        <input type="checkbox" type="class10" value="10B">varicose曲張型
-        <input type="checkbox" type="class10" value="10C">cystic囊性
-        <input type="checkbox" type="class10" value="10D">traction bronchiectasis牽引性支氣管擴張
+        <input type="checkbox" name="class10" value="10A">cylindrical圓柱形
+        <input type="checkbox" name="class10" value="10B">varicose曲張型
+        <input type="checkbox" name="class10" value="10C">cystic囊性
+        <input type="checkbox" name="class10" value="10D">traction bronchiectasis牽引性支氣管擴張
     </label>
 </fieldset>
 <br>
@@ -378,44 +380,25 @@
     
     function submitBtnClick() {
         event.preventDefault();
-        var select;
+        Observation["component"]=[];
 
-        //Affected Side
-        select = document.getElementsByName("consolidation.location")[0];
-        Observation.component[0].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
-
-        //Distribution
-        select = document.getElementsByName("consolidation.distribution")[0];
-        Observation.component[1].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
-
-        //Density
-        select = document.getElementsByName("consolidation.density")[0];
-        Observation.component[2].valueCodeableConcept.coding[0].code = select.options[select.selectedIndex].value;
-
-        //Affected Lobe
-        var checkboxes = document.querySelectorAll('input[name="consolidation.position"]'); //ambil smua kotak
-        var checked = [];
-        for (var i = 0; i < checkboxes.length; i++) {                   //cek tiap textbox
-            var checkbox = checkboxes[i];
-            if (checkbox.checked) checked.push(checkbox.value);         //kalo di ceklist, msukin ke array
-        }
-        var selectedCboxes = checked.join(',');                         //arraynya jadiin string, digabung pake koma
-        Observation.component[3].valueCodeableConcept.coding[0].code = selectedCboxes;  //masukin ke json nya
-
-        //Length
-        select = document.getElementsByName("consolidation.length")[0];
-        Observation.component[4].valueInteger = parseInt(select.value);
-
-        //Width
-        select = document.getElementsByName("consolidation.width")[0];
-        Observation.component[5].valueInteger = parseInt(select.value);
-    
+        addComponentsType1();
+        addComponentsType2();
+        addComponentsType3();
+        addComponentsType4();
+        addComponentsType5();
+        addComponentsType6();
+        addComponentsType7();
+        addComponentsType8();
+        addComponentsType9();
+        addComponentsType10();
+        
         var ObservationStr = JSON.stringify(Observation);
 
         var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=800,top="+(screen.height-400)+",left="+(screen.width-840));
-        win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
+        //win.document.body.innerHTML = "<pre>" + JSON.stringify(Observation, null, 2)+"</pre>";
 
-        HTTPPostData(fhir.url+"Observation", ObservationStr);//uplod ke fhir
+        HTTPPostData(fhir.url+"Observation", ObservationStr); //uplod ke fhir
     }
 
 </script>

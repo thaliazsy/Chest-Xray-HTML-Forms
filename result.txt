@@ -6,6 +6,7 @@ https://hapi.fhir.org/baseR4/Observation/2364005
 
 type3:
 https://hapi.fhir.org/baseR4/Observation/2364006
+https://hapi.fhir.org/baseR4/Observation/2364315
 
 type4:
 https://hapi.fhir.org/baseR4/Observation/2364011
@@ -28,3 +29,8 @@ https://hapi.fhir.org/baseR4/Observation/2364221
 type10:
 https://hapi.fhir.org/baseR4/Observation/2364222
 https://hapi.fhir.org/baseR4/Observation/2364231
+
+
+胸部X光判讀 - 病變種類紀錄表單 (表單一覽)
+Empty: https://hapi.fhir.org/baseR4/Observation/2364316
+Complete: https://hapi.fhir.org/baseR4/Observation/2364319
